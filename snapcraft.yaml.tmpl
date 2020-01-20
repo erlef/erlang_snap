@@ -8,6 +8,9 @@ description: |
 grade: stable
 confinement: classic
 
+architectures:
+- build-on: [arm64, armhf, amd64, i386]
+
 parts:
   erlang:
     plugin: autotools
