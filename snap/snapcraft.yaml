@@ -1,6 +1,6 @@
 name: erlang
 base: core18
-version: '22.0.7'
+version: '22.2.2'
 summary: Erlang/OTP programming language and build tool Rebar3.
 description: |
   Erlang is a programming language used to build massively scalable soft real-time systems with requirements on high availability. Some of its uses are in telecoms, banking, e-commerce, computer telephony and instant messaging. Erlang's runtime system has built-in support for concurrency, distribution and fault tolerance.
@@ -12,7 +12,7 @@ parts:
   erlang:
     plugin: autotools
     source-type: tar
-    source: https://github.com/erlang/otp/archive/OTP-22.0.7.tar.gz
+    source: https://github.com/erlang/otp/archive/OTP-22.2.2.tar.gz
     build-packages:
       - g++
       - make
@@ -25,59 +25,55 @@ parts:
     override-build: |
       ./otp_build autoconf
       snapcraftctl build
-    stage:
-      - usr/lib/erlang/*
-      - usr/bin/*
     prime:
       - usr/lib/erlang/*
       - usr/bin/*
 
-  rebar3:
-    source: https://github.com/erlang/rebar3/archive/3.13.0.zip
+  rebar3-libs:
+    source: "https://github.com/erlang/rebar3/releases/download/3.13.0/rebar3"
+    # escripts are zip files of the libraries that make them up
+    # this will result in a directory of all the rebar3 applications
     source-type: zip
     plugin: dump
-    override-build: |
-      cd rebar3-3.13.0
+    organize:
+      '*': usr/lib/rebar3/
+    prime:
+      - usr/lib/rebar3/*
 
-      cp ../../../../parts/erlang/install/usr/bin/erl ../../../../parts/erlang/install/usr/bin/erl.bk
-      cp ../../../../parts/erlang/install/usr/lib/erlang/erts-10.4.4/bin/erl ../../../../parts/erlang/install/usr/lib/erlang/erts-10.4.4/bin/erl.bk
-
-      sed -i '/^ROOTDIR/d' ../../../../parts/erlang/install/usr/bin/erl
-      sed -i '/^ROOTDIR/d' ../../../../parts/erlang/install/usr/lib/erlang/erts-10.4.4/bin/erl
-      export ROOTDIR=/root/parts/erlang/install/usr/lib/erlang
-      export BINDIR=$ROOTDIR/erts-10.4.4/bin
-      PATH=../../../../parts/erlang/install/usr/bin/:$PATH ./bootstrap
-
-      mv ../../../../parts/erlang/install/usr/bin/erl.bk ../../../../parts/erlang/install/usr/bin/erl
-      mv ../../../../parts/erlang/install/usr/lib/erlang/erts-10.4.4/bin/erl.bk ../../../../parts/erlang/install/usr/lib/erlang/erts-10.4.4/bin/erl
-
-      mkdir -p /root/stage/usr/bin
-      mv rebar3 /root/stage/usr/bin
+  rebar3:
+    source: snap/local
+    plugin: dump
+    organize:
+      rebar3: usr/bin/rebar3/
     prime:
       - usr/bin/rebar3
 
 layout:
   /usr/lib/erlang:
     symlink: $SNAP/usr/lib/erlang
+  /usr/lib/rebar3:
+    symlink: $SNAP/usr/lib/rebar3
 
 apps:
-  rebar3:
-    command: rebar3
   erl:
     command: erl
+  rebar3:
+    command: rebar3
   escript:
     command: escript
-  ct_run:
-    command: ct_run
   dialyzer:
     command: dialyzer
   epmd:
     command: epmd
   erlc:
     command: erlc
-  run_erl:
-    command: run_erl
-  to_erl:
-    command: to_erl
   typer:
     command: typer
+
+  # uuhhh.. snapcraft won't allow underscores in the names
+  run-erl:
+    command: run_erl
+  to-erl:
+    command: to_erl
+  ct-run:
+    command: ct_run
