@@ -4,12 +4,14 @@ version: "${OTP_VERSION}"
 summary: Erlang/OTP programming language and build tool Rebar3.
 description: |
   Erlang is a programming language used to build massively scalable soft real-time systems with requirements on high availability. Some of its uses are in telecoms, banking, e-commerce, computer telephony and instant messaging. Erlang's runtime system has built-in support for concurrency, distribution and fault tolerance.
+icon: snap/local/erlang_logo.svg
+license: Apache2
 
 grade: stable
 confinement: classic
 
 architectures:
-- build-on: [arm64, armhf, amd64, i386]
+- build-on: [amd64, arm64, armhf, i386]
 
 parts:
   erlang:
