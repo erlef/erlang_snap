@@ -27,6 +27,7 @@ parts:
     override-build: |
       ./otp_build autoconf
       snapcraftctl build
+      sed -i 's|ROOTDIR="/usr/lib/erlang"|ROOTDIR="$SNAP/usr/lib/erlang"|' $SNAPCRAFT_PART_INSTALL/usr/bin/erl
     prime:
       - usr/lib/erlang/*
       - usr/bin/*
@@ -50,32 +51,34 @@ parts:
     prime:
       - usr/bin/rebar3
 
-layout:
-  /usr/lib/erlang:
-    symlink: $SNAP/usr/lib/erlang
-  /usr/lib/rebar3:
-    symlink: $SNAP/usr/lib/rebar3
-
 apps:
   erl:
     command: erl
+    aliases: [erl]
   rebar3:
     command: rebar3
+    aliases: [rebar3]
   escript:
     command: escript
+    aliases: [escript]
   dialyzer:
     command: dialyzer
+    aliases: [dialyzer]
   epmd:
     command: epmd
+    aliases: [epmd]
   erlc:
     command: erlc
+    aliases: [erlc]
   typer:
     command: typer
-
-  # uuhhh.. snapcraft won't allow underscores in the names
+    aliases: [type]
   run-erl:
     command: run_erl
+    aliases: [run_erl]
   to-erl:
     command: to_erl
+    aliases: [to_erl]
   ct-run:
     command: ct_run
+    aliases: [ct_run]

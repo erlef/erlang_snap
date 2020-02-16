@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 
-erl -pz /usr/lib/rebar3/*/ebin +sbtu +A1 -noshell -boot start_clean \
+erl -pz ${SNAP}/usr/lib/rebar3/*/ebin +sbtu +A1 -noshell -boot start_clean \
     -s rebar3 main $REBAR3_ERL_ARGS -extra "$@"
