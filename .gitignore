@@ -1,3 +1,4 @@
 *.snap
 snap/snapcraft.yaml
 *.txt
+snap/local/erl*

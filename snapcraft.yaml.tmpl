@@ -27,10 +27,28 @@ parts:
     override-build: |
       ./otp_build autoconf
       snapcraftctl build
-      sed -i 's|ROOTDIR="/usr/lib/erlang"|ROOTDIR="$SNAP/usr/lib/erlang"|' $SNAPCRAFT_PART_INSTALL/usr/bin/erl
+      rm $SNAPCRAFT_PART_INSTALL/usr/lib/erlang/erts-${ERTS_VERSION}/bin/erl
+      rm $SNAPCRAFT_PART_INSTALL/usr/lib/erlang/bin/erl
+      rm $SNAPCRAFT_PART_INSTALL/usr/bin/erl
+
     prime:
       - usr/lib/erlang/*
       - usr/bin/*
+      - -usr/lib/erlang/erts-${ERTS_VERSION}/bin/erl
+      - -usr/lib/erlang/bin/erl
+      - -usr/bin/erl
+
+  erl:
+    source: snap/local
+    plugin: dump
+    organize:
+      erl1: usr/bin/erl
+      erl2: usr/lib/erlang/bin/erl
+      erl3: usr/lib/erlang/erts-${ERTS_VERSION}/bin/erl
+    prime:
+      - usr/bin/erl
+      - usr/lib/erlang/bin/erl
+      - usr/lib/erlang/erts-${ERTS_VERSION}/bin/erl
 
   rebar3-libs:
     source: "https://github.com/erlang/rebar3/releases/download/${REBAR3_VERSION}/rebar3"
@@ -47,7 +65,7 @@ parts:
     source: snap/local
     plugin: dump
     organize:
-      rebar3: usr/bin/rebar3/
+      rebar3: usr/bin/rebar3
     prime:
       - usr/bin/rebar3
 

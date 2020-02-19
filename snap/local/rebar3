@@ -1,4 +1,8 @@
 #!/usr/bin/env sh
 
-erl -pz ${SNAP}/usr/lib/rebar3/*/ebin +sbtu +A1 -noshell -boot start_clean \
+SCRIPT=$(readlink $0 || true)
+[ -z $SCRIPT ] && SCRIPT=$0
+SCRIPT_DIR="$(cd `dirname "$SCRIPT"` && pwd -P)"
+
+erl -pz ${SCRIPT_DIR}/../lib/rebar3/*/ebin +sbtu +A1 -noshell -boot start_clean \
     -s rebar3 main $REBAR3_ERL_ARGS -extra "$@"
